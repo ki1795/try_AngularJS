@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>手機資費查詢系統</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/grayscale.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+</head>
+
+<body ng-app='tele_plan' ng-controller='searchCtrl' id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand page-scroll" href="#page-top"><i class="icon-home"></i>HOME</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+                <ul class="nav navbar-nav">
+                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+                    <li class="hidden"><a href="#page-top"></a></li>
+                    <li><a class="page-scroll" href="#search">Search</a></li>
+                    <li><a class="page-scroll" href="#result">Result</a></li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container -->
+    </nav>
+    
+
+    <!-- Intro Header -->
+    <header class="intro">
+        <div class="intro-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <h1 class="brand-heading"> iNEED</h1>
+                        <p class="intro-text">A Better Tele Contract<br>Suits ME</p>
+                        <a href="#search" class="btn btn-circle page-scroll">
+                            <i class="fa fa-angle-double-down animated"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Search Section -->
+    <section id="search" class="container content-section text-center">
+        <div>
+            <div style="width:700px; margin:0px auto;">
+                <p class="intro-text">- Search -</p>
+                <table class="table table-hover table-striped" BORDER='0'>
+                    <tr style="background: #454; color: #fff">
+                        <th><input type="checkbox" id="cc" ng-model="cc"></th>
+                        <th>電信公司</th>
+                        <th><input type="checkbox" id="ic" ng-model="ic"></th>
+                        <th>申辦限制</th>
+                        <th><input type="checkbox" id="nc" ng-model="nc"></th>
+                        <th>網路</th>
+                        <th><input type="checkbox" id="tc" ng-model="tc"></th>
+                        <th>通話</th>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" value="CHT" id="c1" ng-checked="cc"></td>
+                        <td>CHT</td>
+                        <td><input type="checkbox" value="normal" id="i1" ng-checked="ic"></td>
+                        <td>一般</td>
+                        <td><input type="checkbox" value="full" id="n1" ng-checked="nc"></td>
+                        <td>吃到飽</td>
+                        <td><input type="checkbox" value="full" id="te1" ng-checked="tc"></td>
+                        <td>網內免費</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" value="FET" id="c2" ng-checked="cc"></td>
+                        <td>FET</td>
+                        <td><input type="checkbox" value="student" id="i2" ng-checked="ic"></td>
+                        <td>學生</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" value="TWM" id="c3" ng-checked="cc"></td>
+                        <td>TWM</td>
+                        <td><input type="checkbox" value="continue" id="i3" ng-checked="ic"></td>
+                        <td>續約</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" value="Gt" id="c4" ng-checked="cc"></td>
+                        <td>Gt</td>
+                        <td><input type="checkbox" value="np" id="i4" ng-checked="ic"></td>
+                        <td>攜碼</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" value="TS" id="c5" ng-checked="cc"></td>
+                        <td>TS</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                            
+                </table>
+                <a class="btn btn-primary page-scroll" ng-click="query()" href="#result">查詢</a>
+            </div>
+        </div>
+    </section>
+    <div> 
+        
+    </div>
+    <!-- Result Section -->
+    <section class="container content-section text-center">
+        <div id="result">
+            <br><br><br>
+            <div ng-show="res_y">
+                <div style="width:100%; margin:0px auto;" align="left">
+                    <ul class="nav nav-tabs">
+                        <li><a data-toggle="tab" ng-click="res_s=true">查詢結果</a></li>
+                        <li><a data-toggle="tab" ng-click="res_s=false">比較清單</a></li>
+                        <li><a data-toggle="collapse" data-target="#viewColumnButton">顯示欄位<span class="caret"></a></li>
+                        <li><a data-toggle="collapse" data-target="#viewOrderBy">顯示排序<span class="caret"></a></li>
+                    </ul>
+                    <div>
+                        <div ng-show="res_s">
+                            <div style="float:right">
+                                <button class="btn-xs btn-info" ng-click="selectedList.length = 0">清空</button>
+                            </div>
+                            <button class="btn-sm btn-default">比較清單</button><br>
+                            <div style="padding:10px">
+                                <div ng-repeat="l in selectedList" style="display:inline">
+                                    <button class="btn-xs btn-default">[{{l.name}}] {{l.Pname}}</button> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div id="viewColumnButton" class="collapse">
+                            <div ng-repeat="vc in viewColumn" style="display:inline">
+                                <button ng-class="{true: 'btn btn-default', false: 'btn btn-info'}[vc.viewTitle]" ng-model="vc.viewTitle" ng-checked="vc.viewTitle" ng-click="vc.viewTitle=!vc.viewTitle">{{vc.attr}}</button>
+                            </div>
+                        </div>
+                        <div id="viewOrderBy" class="collapse">
+                            <div ng-repeat="oc in orderCase" style="display:inline">
+                                <button ng-class="{true: 'btn btn-default', false: 'btn btn-info'}[oc.choosed]" ng-click="ordering(oc.item, oc.primer)">{{oc.name}}</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-show="res_s" id="reList">
+                        <table class="table table-hover table-striped">
+                        <tr>
+                            <th ng-show="viewColumn[0].viewTitle">電信公司</th>
+                            <th ng-show="viewColumn[1].viewTitle">方案</th>
+                            <th ng-show="viewColumn[2].viewTitle">頻段</th>
+                            <th ng-show="viewColumn[3].viewTitle">月租費</th>
+                            <th ng-show="viewColumn[4].viewTitle">申辦身份</th>
+                            <th ng-show="viewColumn[5].viewTitle">網路流量</th>
+                            <th ng-show="viewColumn[6].viewTitle">網內通話量</th>
+                            <th ng-show="viewColumn[7].viewTitle">網內通話價格</th>
+                            <th ng-show="viewColumn[7].viewTitle">網外通話價格</th>
+                            <th ng-show="viewColumn[8].viewTitle">網內簡訊量</th>
+                            <th ng-show="viewColumn[8].viewTitle">網內簡訊價格</th>
+                            <th ng-show="viewColumn[8].viewTitle">網外簡訊價格</th>
+                            <th ng-show="viewColumn[9].viewTitle">評分</th>
+                            <th ng-show="viewColumn[10].viewTitle" class="text-left">備註</th>
+                            <th ng-show="viewColumn[11].viewTitle" class="text-left">評論</th>
+                        </tr>							
+                        <tr ng-repeat="re in res">
+                            <td ng-show="viewColumn[0].viewTitle" class="text-center">{{re.name}}</td>
+                            <td ng-show="viewColumn[1].viewTitle" class="text-center">
+                                {{re.Pname}}<br>
+                                <a class="btn-xs btn-default-2" ng-click="selected(re.PID)" class="text-center">加入比較</a>
+                            </td>
+                            <td ng-show="viewColumn[2].viewTitle" class="text-center">{{re.freq}}</td>
+                            <td ng-show="viewColumn[3].viewTitle" class="text-center">{{re.fare}}</td>
+                            <td ng-show="viewColumn[4].viewTitle" class="text-center">{{re.identity}}</td>
+                            <td ng-show="viewColumn[5].viewTitle" class="text-center">
+                                <div ng-show="re.netCredits==9999">
+                                    無限制
+                                </div>
+                                <div ng-hide="re.netCredits==9999">
+                                    {{re.netCredits}}
+                                </div>
+                            </td>
+                            <td ng-show="viewColumn[6].viewTitle" class="text-center">
+                                <div ng-show="re.inCredits==9999">
+                                    無限制
+                                </div>
+                                <div ng-hide="re.inCredits==9999">
+                                    {{re.inCredits}}
+                                </div>
+                            </td>
+                            <td ng-show="viewColumn[7].viewTitle" class="text-center">
+                                {{re.inRate}}
+                            </td>
+                            <td ng-show="viewColumn[7].viewTitle" class="text-center">
+                                {{re.outRate}}
+                            </td>
+                            <td ng-show="viewColumn[8].viewTitle" class="text-center">
+                                {{re.inMsgCredits}}
+                            </td>
+                            <td ng-show="viewColumn[8].viewTitle" class="text-center">
+                                {{re.inMsgRate}}
+                            </td>
+                            <td ng-show="viewColumn[8].viewTitle" class="text-center">
+                                {{re.outMsgRate}}
+                            </td>
+                            <td ng-show="viewColumn[9].viewTitle" align="center">
+                                <div ng-show="re.Star>0">{{re.Star}}</div>
+                            </td>
+                            <td ng-show="viewColumn[10].viewTitle" align="left">{{re.nNotes}}<br>{{re.tNotes}}</td>
+                            <td ng-show="viewColumn[11].viewTitle" align="left">
+                                <div ng-repeat="co in co_res | filter : re.PID ">
+                                    <div ng-hide="co.time==null">
+                                        {{co.user_name}}: {{co.comment}} ({{co.time}})<br>
+                                    </div>
+                                </div>
+                                <a class="btn-sm btn-default" ng-click="viewComm(re.PID)">增加評論</a>
+                                <div ng-repeat="comm in comments | filter : re.PID">
+                                    <div ng-if="comm.view">
+                                        <form ng-submit="comment(re.PID)">
+                                            <input type="text" ng-model="comm.coName"><br>
+                                            <input type="text" ng-model="comm.coComment"><br>
+                                            評分:
+                                            <select ng-model="comm.coStar">
+                                                <option value="null"></option>
+                                                <option value="0">0</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                            <input type="submit" value="送出" style="display:inline" class="btn-sm btn-default">
+                                        </form>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </table>
+                    </div>
+                    <div ng-hide="res_s" id="seList">
+                        <table class="table table-hover table-striped">
+                        <tr>
+                            <th ng-show="viewColumn[0].viewTitle">電信公司</th>
+                            <th ng-show="viewColumn[1].viewTitle">方案</th>
+                            <th ng-show="viewColumn[2].viewTitle">頻段</th>
+                            <th ng-show="viewColumn[3].viewTitle">月租費</th>
+                            <th ng-show="viewColumn[4].viewTitle">申辦身份</th>
+                            <th ng-show="viewColumn[5].viewTitle">網路流量</th>
+                            <th ng-show="viewColumn[6].viewTitle">網內通話量</th>
+                            <th ng-show="viewColumn[7].viewTitle">網內通話價格</th>
+                            <th ng-show="viewColumn[7].viewTitle">網外通話價格</th>
+                            <th ng-show="viewColumn[8].viewTitle">網內簡訊量</th>
+                            <th ng-show="viewColumn[8].viewTitle">網內簡訊價格</th>
+                            <th ng-show="viewColumn[8].viewTitle">網外簡訊價格</th>
+                            <th ng-show="viewColumn[9].viewTitle">評分</th>
+                            <th ng-show="viewColumn[10].viewTitle" class="text-left">備註</th>
+                            <th ng-show="viewColumn[11].viewTitle" class="text-left">評論</th>
+                        </tr>
+                        <tr ng-repeat="lre in selectedList ">
+                            <td ng-show="viewColumn[0].viewTitle" align="center">{{lre.name}}</td>
+                            <td ng-show="viewColumn[1].viewTitle" align="center">{{lre.Pname}}</td>
+                            <td ng-show="viewColumn[2].viewTitle" align="center">{{lre.freq}}</td>
+                            <td ng-show="viewColumn[3].viewTitle" align="center">{{lre.fare}}</td>
+                            <td ng-show="viewColumn[4].viewTitle" align="center">{{lre.identity}}</td>
+                            <td ng-show="viewColumn[5].viewTitle" align="center">
+                                <div ng-show="lre.==9999">
+                                    無限制
+                                </div>
+                                <div ng-hide="lre.netCredits==9999">
+                                    {{lre.netCredits}}
+                                </div>
+                            </td>
+                            <td ng-show="viewColumn[6].viewTitle" align="center">
+                                <div ng-show="lre.inCredits==9999">
+                                    無限制
+                                </div>
+                                <div ng-hide="lre.inCredits==9999">
+                                    {{lre.inCredits}}
+                                </div>
+                            </td>
+                            <td ng-show="viewColumn[7].viewTitle" class="text-center">
+                                {{lre.inRate}}
+                            </td>
+                            <td ng-show="viewColumn[7].viewTitle" class="text-center">
+                                {{lre.outRate}}
+                            </td>
+                            <td ng-show="viewColumn[8].viewTitle" class="text-center">
+                                {{lre.inMsgCredits}}
+                            </td>
+                            <td ng-show="viewColumn[8].viewTitle" class="text-center">
+                                {{lre.inMsgRate}}
+                            </td>
+                            <td ng-show="viewColumn[8].viewTitle" class="text-center">
+                                {{lre.outMsgRate}}
+                            </td>
+                            <td ng-show="viewColumn[9].viewTitle" align="center">
+                                <div ng-show="lre.Star>0">{{lre.Star}}</div>
+                            </td>
+                            <td ng-show="viewColumn[10].viewTitle">{{lre.nNotes}}<br>{{lre.tNotes}}</td>
+                            <td ng-show="viewColumn[11].viewTitle">
+                                <div ng-repeat="lco in co_res | filter : lre.PID ">
+                                    <div ng-hide="lco.time==null">
+                                        {{lco.user_name}}: {{lco.comment}} ({{lco.time}})<br>
+                                    </div>
+                                </div>
+                                <a class="btn-sm btn-default page-scroll" ng-click="viewComm(lre.PID)">增加評論</a>
+                                <div ng-repeat="comm in comments | filter : lre.PID">
+                                    <div ng-if="comm.view">
+                                        <form ng-submit="comment(lre.PID)">
+                                            <input type="text" ng-model="comm.coName"><br>
+                                            <input type="text" ng-model="comm.coComment"><br>
+                                            評分:
+                                            <select ng-model="comm.coStar">
+                                                <option value="null"></option>
+                                                <option value="0">0</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                            <input type="submit" value="送出" style="display:inline" class="btn-sm btn-default">
+                                        </form>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="res_nd">
+                no data.<br>
+            </div>
+            <div ng-show="res_f">
+                failed.<br>
+            </div>
+        </div>
+        <br><br><br><br><br><br><br><br>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <p>- Copyright &copy; 手機資費查詢系統 -</p>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="js/jquery.easing.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="js/grayscale.js"></script>
+    
+    <!-- angularJS JavaScript -->
+    <script src="js/angular.min.js"></script>
+    
+    <!-- Ctrl JavaScript -->
+    <script src="js/ctrl.js"></script>
+    
+    
+
+</body>
+</html>
